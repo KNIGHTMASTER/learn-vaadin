@@ -1,4 +1,4 @@
-package com.zisal.learn.vaadin.ui;
+package com.zisal.learn.vaadin.ui.scaffolding;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.event.ShortcutAction;

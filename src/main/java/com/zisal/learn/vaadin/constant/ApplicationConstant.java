@@ -1,13 +1,27 @@
 package com.zisal.learn.vaadin.constant;
 
-import java.util.ResourceBundle;
-
 /**
  * Created by Ladies Man on 4/21/2016.
  */
 public interface ApplicationConstant {
+
+    interface VAADINTheme {
+        String VALO             = "valo";
+    }
+
     interface View{
-        String THEME            = "valo";
+        String THEME            = VAADINTheme.VALO;
+        interface ListOfValue {
+            String CAPTION_PROPERTY = "data";
+            interface DisplayDataRowTable{
+                String ITEM_5       = "5";
+                String ITEM_10      = "10";
+                String ITEM_15      = "15";
+                String ITEM_20      = "20";
+                String ITEM_50      = "50";
+                float WIDTH         = 50;
+            }
+        }
     }
 
     interface Configuration{
