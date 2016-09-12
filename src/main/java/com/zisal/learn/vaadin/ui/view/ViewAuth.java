@@ -9,7 +9,7 @@ import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
-import com.zisal.learn.vaadin.component.IViewInitalizer;
+import com.zisal.learn.vaadin.component.IComponentInitalizer;
 
 import javax.annotation.PostConstruct;
 
@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
  */
 @SpringView(name = ViewAuth.VIEW_NAME)
 @UIScope
-public class ViewAuth extends VerticalLayout implements View, IViewInitalizer {
+public class ViewAuth extends VerticalLayout implements View, IComponentInitalizer {
 
     private static final long serialVersionUID = 7467966466747200914L;
 

@@ -11,9 +11,9 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(SpringConfiguration.COMPONENT_SCAN)
 @SpringBootApplication
 @EnableVaadin
-public class LearnVaadinApplication extends ServletInitializer {
+public class LearnVAADINApplication extends ServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LearnVaadinApplication.class, args);
+		SpringApplication.run(LearnVAADINApplication.class, args);
 	}
 }

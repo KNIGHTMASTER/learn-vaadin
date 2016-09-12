@@ -6,9 +6,10 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
-import com.zisal.learn.vaadin.component.IViewInitalizer;
+import com.zisal.learn.vaadin.component.IComponentInitalizer;
 import com.zisal.learn.vaadin.data.EntityEmployee;
 import com.zisal.learn.vaadin.data.RepoEmployee;
+import com.zisal.learn.vaadin.ui.dialog.ConfirmationDialogDeleteSingleRecord;
 import com.zisal.learn.vaadin.ui.lov.LOVDisplayDataRowTable;
 import com.zisal.learn.vaadin.ui.scaffolding.EmployeeEditor;
 import com.zisal.learn.vaadin.ui.textfield.TextFieldSearch;
@@ -24,7 +25,7 @@ import java.util.List;
  */
 
 @SpringView(name = ViewMain.VIEW_NAME)
-public class ViewMain extends VerticalLayout implements View, IViewInitalizer{
+public class ViewMain extends VerticalLayout implements View, IComponentInitalizer {
 
     private static final long serialVersionUID = -1455222850637822862L;
 
@@ -32,24 +33,20 @@ public class ViewMain extends VerticalLayout implements View, IViewInitalizer{
 
     private Logger logger = LoggerFactory.getLogger(ViewMain.class);
 
+    @Autowired
+    private RepoEmployee repoEmployee;
+    @Autowired
+    private EmployeeEditor employeeEditor;
+    @Autowired
+    private LOVDisplayDataRowTable lovDisplayDataRowTable;
+    @Autowired
+    private TextFieldSearch textFieldSearch;
+
     private Grid grid;
     private TextField filter;
     private Button addNewButton;
 
-    @Autowired
-    private RepoEmployee repoEmployee;
-
-    @Autowired
-    private EmployeeEditor employeeEditor;
-
-    @Autowired
-    LOVDisplayDataRowTable lovDisplayDataRowTable;
-
-    @Autowired
-    TextFieldSearch textFieldSearch;
-
-    public ViewMain(){
-    }
+    public ViewMain(){}
 
     @PostConstruct
     @Override

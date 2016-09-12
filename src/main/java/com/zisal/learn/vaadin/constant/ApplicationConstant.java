@@ -19,7 +19,7 @@ public interface ApplicationConstant {
                 String ITEM_15      = "15";
                 String ITEM_20      = "20";
                 String ITEM_50      = "50";
-                float WIDTH         = 50;
+                float WIDTH         = 80;
             }
         }
     }

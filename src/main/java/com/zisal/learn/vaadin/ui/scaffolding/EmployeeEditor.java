@@ -12,6 +12,9 @@ import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.zisal.learn.vaadin.data.EntityEmployee;
 import com.zisal.learn.vaadin.data.RepoEmployee;
+import com.zisal.learn.vaadin.ui.dialog.ConfirmationDialogDeleteSingleRecord;
+import com.zisal.learn.vaadin.ui.dialog.ISimpleConfirmDialogListener;
+import com.zisal.learn.vaadin.ui.localization.SimpleMessageSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,14 +24,20 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 @SpringComponent
 @UIScope
-public class EmployeeEditor extends VerticalLayout{
+public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDialogListener {
 
     private static final long serialVersionUID = -446280545995904466L;
 
-    private EntityEmployee entityEmployee;
+    @Autowired
     private RepoEmployee repoEmployee;
+    @Autowired
+    ConfirmationDialogDeleteSingleRecord confirmationDialogDeleteSingleRecord;
+    @Autowired
+    SimpleMessageSource simpleMessageSource;
+
     private Logger logger = LoggerFactory.getLogger(EmployeeEditor.class);
 
+    private EntityEmployee entityEmployee;
     TextField firstName = new TextField("First Name");
     TextField lastName = new TextField("Last Name");
 
@@ -38,9 +47,7 @@ public class EmployeeEditor extends VerticalLayout{
 
     CssLayout actions = new CssLayout(save, delete, cancel);
 
-    @Autowired
-    public EmployeeEditor(RepoEmployee repoEmployee){
-        this.repoEmployee = repoEmployee;
+    public EmployeeEditor(){
         addComponents(firstName, lastName, actions);
         setSpacing(true);
 
@@ -49,12 +56,19 @@ public class EmployeeEditor extends VerticalLayout{
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
         save.addClickListener(e->repoEmployee.save(entityEmployee));
-        delete.addClickListener(e->repoEmployee.delete(entityEmployee));
+        delete.addClickListener(e->{
+            try {
+                simpleMessageSource.setKey("ui.dialog.confirm.message");
+                confirmationDialogDeleteSingleRecord = new ConfirmationDialogDeleteSingleRecord(this, getUI(), simpleMessageSource);
+                confirmationDialogDeleteSingleRecord.init();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+        });
         cancel.addClickListener(e->editEmploye(entityEmployee));
     }
 
     public final void editEmploye(EntityEmployee p_EntityEMployee) {
-        logger.info("ERROR : {}", p_EntityEMployee.toString());
         final boolean persisted = p_EntityEMployee.getId() != null;
         if (persisted) {
             // Find fresh entity for editing
@@ -78,8 +92,17 @@ public class EmployeeEditor extends VerticalLayout{
         firstName.selectAll();
     }
 
-    public interface ChangeHandler {
+    @Override
+    public void confirmed() {
+        repoEmployee.delete(entityEmployee);
+    }
 
+    @Override
+    public void unConfirmed() {
+        logger.info("Cancel Delete Row");
+    }
+
+    public interface ChangeHandler {
         void onChange();
     }
 

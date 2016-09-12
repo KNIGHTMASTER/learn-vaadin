@@ -18,6 +18,15 @@ public class LOVDisplayDataRowTable extends LOVBase {
 
     private static final long serialVersionUID = 1727150704699762885L;
 
+    private ILOVListener ilovListener;
+
+    public LOVDisplayDataRowTable(ILOVListener ilovListener) {
+        this.ilovListener = ilovListener;
+    }
+
+    public LOVDisplayDataRowTable() {
+    }
+
     @PostConstruct
     @Override
     public void init() throws Exception {
@@ -33,8 +42,12 @@ public class LOVDisplayDataRowTable extends LOVBase {
 
         setParamComponent(LOVParam);
 
+        this.setNullSelectionAllowed(false);
+        this.setTextInputAllowed(false);
         this.setWidth(DisplayDataRowTable.WIDTH, Unit.PIXELS);
+        this.select(container.firstItemId());
         super.init();
+        this.addItemSetChangeListener(e -> ilovListener.onItemChange());
     }
 
 }
