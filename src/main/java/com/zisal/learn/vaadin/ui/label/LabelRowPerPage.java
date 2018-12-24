@@ -15,7 +15,6 @@ import javax.annotation.PostConstruct;
 @SpringComponent
 @ViewScope
 public class LabelRowPerPage extends Label implements IComponentInitalizer {
-	
 	/**
 	 * 
 	 * 

@@ -28,14 +28,13 @@ public class LOVDisplayDataRowTable extends LOVBase {
     @PostConstruct
     @Override
     public void initComponents() throws Exception {
-
+        LOVParam LOVParam = new LOVParam();
         BeanItemContainer<LOVDto> container = new BeanItemContainer<>(LOVDto.class);
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_5));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_10));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_15));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_20));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_50));
-        LOVParam = new LOVParam<>();
         LOVParam.setBeanItemContainer(container);
 
         setParamComponent(LOVParam);
@@ -43,8 +42,8 @@ public class LOVDisplayDataRowTable extends LOVBase {
         this.setNullSelectionAllowed(false);
         this.setTextInputAllowed(false);
         this.setWidth(DisplayDataRowTable.WIDTH, Unit.PIXELS);
-        super.initComponents();
         this.select(container.firstItemId());
+        super.initComponents();
         this.addItemSetChangeListener(e -> ilovListener.onItemChange());
     }
 

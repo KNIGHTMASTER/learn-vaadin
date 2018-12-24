@@ -46,20 +46,17 @@ public class DimensionalCodeGenerator implements IDCGenerator, IComponentInitali
     public void generateBarcode() {
         try {
             bitMatrix = new Code128Writer().encode(dcGeneratorParam.getCode(), BarcodeFormat.CODE_128, 150, 80, null);
-            try {
-                filePath = dcGeneratorParam.getPath().concat(dcGeneratorParam.getFileName());
-                logger.info("File Path : "+filePath);
-                MatrixToImageWriter.writeToStream(bitMatrix, "png", new FileOutputStream(new File(filePath)));
-                logger.info("Success Generate BARCODE ");
-            } catch (IOException e) {
-                showErrorNotification();
-                e.printStackTrace();
-            }
-        } catch (WriterException e) {
+            filePath = dcGeneratorParam.getPath().concat(dcGeneratorParam.getFileName());
+            logger.info("File Path : "+filePath);
+            MatrixToImageWriter.writeToStream(bitMatrix, "png", new FileOutputStream(new File(filePath)));
+            logger.info("Success Generate BARCODE ");
+        } catch (Exception e) {
             showErrorNotification();
             e.printStackTrace();
         }
     }
+
+
 
     private void showErrorNotification(){
         Notification.show("Error Process",

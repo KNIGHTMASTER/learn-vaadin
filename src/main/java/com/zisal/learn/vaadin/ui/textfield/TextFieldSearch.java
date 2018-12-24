@@ -32,4 +32,5 @@ public class TextFieldSearch extends TextField implements IComponentInitalizer {
         this.setIcon(FontAwesome.SEARCH);
         this.addStyleName(ValoTheme.TEXTFIELD_INLINE_ICON);
     }
+
 }

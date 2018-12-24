@@ -6,6 +6,10 @@ import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringComponent;
 import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.ui.*;
+import com.vaadin.ui.Button;
+import com.vaadin.ui.CssLayout;
+import com.vaadin.ui.TextField;
+import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.themes.ValoTheme;
 import com.zisal.learn.vaadin.data.EntityEmployee;
 import com.zisal.learn.vaadin.data.RepoEmployee;
@@ -35,7 +39,6 @@ public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDial
     private Logger logger = LoggerFactory.getLogger(EmployeeEditor.class);
 
     private EntityEmployee entityEmployee;
-
     TextField firstName = new TextField("First Name");
     TextField lastName = new TextField("Last Name");
 
@@ -50,6 +53,9 @@ public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDial
         setSpacing(true);
 
         actionButtons.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
+        CssLayout actions = new CssLayout(save, delete, cancel);
+
+        actions.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
         save.setStyleName(ValoTheme.BUTTON_PRIMARY);
         save.setClickShortcut(ShortcutAction.KeyCode.ENTER);
 
@@ -58,6 +64,8 @@ public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDial
             try {
                 simpleMessageSource.setKey("ui.dialog.confirm.message");
                 confirmationDialogDeleteSingleRecord = new ConfirmationDialogDeleteSingleRecord(this, UI.getCurrent(), simpleMessageSource);
+                confirmationDialogDeleteSingleRecord.initComponents();
+                confirmationDialogDeleteSingleRecord = new ConfirmationDialogDeleteSingleRecord(this, getUI(), simpleMessageSource);
                 confirmationDialogDeleteSingleRecord.initComponents();
             } catch (Exception e1) {
                 e1.printStackTrace();
@@ -69,6 +77,7 @@ public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDial
     public final void editEmployee(EntityEmployee p_EntityEMployee) {
         final boolean persisted = p_EntityEMployee.getId() != null;
         if (persisted) {
+            // Find fresh entity for editing
             entityEmployee = repoEmployee.findOne(p_EntityEMployee.getId());
         }
         else {
@@ -106,5 +115,6 @@ public class EmployeeEditor extends VerticalLayout implements ISimpleConfirmDial
     public void setChangeHandler(ChangeHandler changeHandler){
         save.addClickListener(e->changeHandler.onChange());
         delete.addClickListener(e->changeHandler.onChange());
+        save.addClickListener(e->changeHandler.onChange());
     }
 }

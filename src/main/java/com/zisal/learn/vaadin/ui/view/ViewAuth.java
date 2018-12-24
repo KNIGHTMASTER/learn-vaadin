@@ -46,6 +46,7 @@ public class ViewAuth extends VerticalLayout implements View, IComponentInitaliz
         loginPanel.addComponent(buildLabels());
         loginPanel.addComponent(buildFields());
         loginPanel.addComponent(new CheckBox("Remember Me", false));
+        loginPanel.addComponent(new CheckBox("Remember Me", true));
         return loginPanel;
     }
 
