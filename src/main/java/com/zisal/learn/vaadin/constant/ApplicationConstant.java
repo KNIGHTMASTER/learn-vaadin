@@ -21,6 +21,10 @@ public interface ApplicationConstant {
                 String ITEM_50      = "50";
                 float WIDTH         = 80;
             }
+            interface RowSelection{
+            	String ALL = "ALL";
+            	String NONE = "NONE";
+            }
         }
     }
 

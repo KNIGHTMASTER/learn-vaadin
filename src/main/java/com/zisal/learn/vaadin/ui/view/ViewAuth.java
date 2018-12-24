@@ -29,7 +29,7 @@ public class ViewAuth extends VerticalLayout implements View, IComponentInitaliz
 
     @PostConstruct
     @Override
-    public void init() throws Exception {
+    public void initComponents() throws Exception {
         setSizeFull();
         Component loginForm = buildLoginForm();
         addComponent(loginForm);
@@ -45,7 +45,7 @@ public class ViewAuth extends VerticalLayout implements View, IComponentInitaliz
 
         loginPanel.addComponent(buildLabels());
         loginPanel.addComponent(buildFields());
-        loginPanel.addComponent(new CheckBox("Remember Me", true));
+        loginPanel.addComponent(new CheckBox("Remember Me", false));
         return loginPanel;
     }
 
@@ -102,8 +102,6 @@ public class ViewAuth extends VerticalLayout implements View, IComponentInitaliz
             Notification.show("Failed Login", Notification.Type.ERROR_MESSAGE);
         }
     }
-
-
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {

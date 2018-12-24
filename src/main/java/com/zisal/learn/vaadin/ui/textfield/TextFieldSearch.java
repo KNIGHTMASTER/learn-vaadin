@@ -26,7 +26,7 @@ public class TextFieldSearch extends TextField implements IComponentInitalizer {
 
     @PostConstruct
     @Override
-    public void init() throws Exception {
+    public void initComponents() throws Exception {
         Responsive.makeResponsive(this);
         this.setInputPrompt(messageSource.getMessage("ui.textfield.search.input.prompt", null, getLocale()));
         this.setIcon(FontAwesome.SEARCH);

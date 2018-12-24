@@ -2,9 +2,7 @@ package com.zisal.learn.vaadin.ui.lov;
 
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.spring.annotation.SpringComponent;
-import com.vaadin.spring.annotation.UIScope;
 import com.vaadin.spring.annotation.ViewScope;
-import com.zisal.learn.vaadin.constant.ApplicationConstant;
 import com.zisal.learn.vaadin.constant.ApplicationConstant.View.ListOfValue.DisplayDataRowTable;
 
 import javax.annotation.PostConstruct;
@@ -29,8 +27,7 @@ public class LOVDisplayDataRowTable extends LOVBase {
 
     @PostConstruct
     @Override
-    public void init() throws Exception {
-        LOVParam LOVParam = new LOVParam();
+    public void initComponents() throws Exception {
 
         BeanItemContainer<LOVDto> container = new BeanItemContainer<>(LOVDto.class);
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_5));
@@ -38,6 +35,7 @@ public class LOVDisplayDataRowTable extends LOVBase {
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_15));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_20));
         container.addItem(new LOVDto(null, DisplayDataRowTable.ITEM_50));
+        LOVParam = new LOVParam<>();
         LOVParam.setBeanItemContainer(container);
 
         setParamComponent(LOVParam);
@@ -45,8 +43,8 @@ public class LOVDisplayDataRowTable extends LOVBase {
         this.setNullSelectionAllowed(false);
         this.setTextInputAllowed(false);
         this.setWidth(DisplayDataRowTable.WIDTH, Unit.PIXELS);
+        super.initComponents();
         this.select(container.firstItemId());
-        super.init();
         this.addItemSetChangeListener(e -> ilovListener.onItemChange());
     }
 

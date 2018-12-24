@@ -6,10 +6,12 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.spring.annotation.SpringView;
 import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ChameleonTheme;
+import com.vaadin.ui.themes.Runo;
 import com.zisal.learn.vaadin.component.IComponentInitalizer;
+import com.zisal.learn.vaadin.component.IListenerInitializer;
 import com.zisal.learn.vaadin.data.EntityEmployee;
 import com.zisal.learn.vaadin.data.RepoEmployee;
-import com.zisal.learn.vaadin.ui.dialog.ConfirmationDialogDeleteSingleRecord;
 import com.zisal.learn.vaadin.ui.lov.LOVDisplayDataRowTable;
 import com.zisal.learn.vaadin.ui.scaffolding.EmployeeEditor;
 import com.zisal.learn.vaadin.ui.textfield.TextFieldSearch;
@@ -25,7 +27,7 @@ import java.util.List;
  */
 
 @SpringView(name = ViewMain.VIEW_NAME)
-public class ViewMain extends VerticalLayout implements View, IComponentInitalizer {
+public class ViewMain extends VerticalLayout implements View, IComponentInitalizer, IListenerInitializer {
 
     private static final long serialVersionUID = -1455222850637822862L;
 
@@ -43,53 +45,49 @@ public class ViewMain extends VerticalLayout implements View, IComponentInitaliz
     private TextFieldSearch textFieldSearch;
 
     private Grid grid;
-    private TextField filter;
     private Button addNewButton;
+    Grid.MultiSelectionModel selectionModel;
 
     public ViewMain(){}
 
     @PostConstruct
     @Override
-    public void init() {
+    public void initComponents() throws Exception {
         grid = new Grid();
-        grid.setHeight(300, Unit.PIXELS);
         grid.setColumns("id", "firstName", "lastName");
+        selectionModel = (Grid.MultiSelectionModel) grid.setSelectionMode(Grid.SelectionMode.MULTI);
+        selectionModel.selectAll();
+        grid.setSizeFull();
 
-        filter = new TextField();
-        filter.setInputPrompt("Filter By Last Name");
+        addNewButton = new Button("Create", FontAwesome.PLUS);
 
-        addNewButton = new Button("New Employee", FontAwesome.PLUS);
-        Label labelMaxRows = new Label("Max Rows : ");
+        HorizontalSplitPanel hsplit = new HorizontalSplitPanel();
+        hsplit.setLocked(true);
 
-        HorizontalLayout actions = new HorizontalLayout(filter, addNewButton, labelMaxRows, lovDisplayDataRowTable, textFieldSearch);
-        VerticalLayout mainLayout = new VerticalLayout(actions, grid, employeeEditor);
+        Panel panel = new Panel();
+        panel.setContent(textFieldSearch);
+        textFieldSearch.setMaxLength(50);
+
+        HorizontalLayout actionComponents = new HorizontalLayout(lovDisplayDataRowTable, textFieldSearch);
+        actionComponents.setSpacing(true);
+        hsplit.setFirstComponent(addNewButton);
+
+        VerticalLayout rightTopGrid = new VerticalLayout();
+        rightTopGrid.setSizeFull();
+        rightTopGrid.addComponent(actionComponents);
+        rightTopGrid.setComponentAlignment(actionComponents, Alignment.MIDDLE_RIGHT);
+
+        hsplit.setSecondComponent(rightTopGrid);
+
+        VerticalLayout mainLayout = new VerticalLayout(hsplit, grid, employeeEditor);
+        mainLayout.setSizeFull();
         addComponent(mainLayout);
 
-        actions.setSpacing(true);
         mainLayout.setSpacing(true);
         mainLayout.setMargin(true);
 
-        grid.addSelectionListener(e -> {
-            if (e.getSelected().isEmpty()) {
-                employeeEditor.setVisible(false);
-            }
-            else {
-                logger.info("Selected Row : {}", grid.getSelectedRow().toString());
-                employeeEditor.editEmploye((EntityEmployee) grid.getSelectedRow());
-            }
-        });
-
-        // Instantiate and edit new Customer the new button is clicked
-        addNewButton.addClickListener(e -> employeeEditor.editEmploye(new EntityEmployee("", "")));
-
-        // Listen changes made by the editor, refresh data from backend
-        employeeEditor.setChangeHandler(() -> {
-            employeeEditor.setVisible(false);
-            //listCustomers(filter.getData());
-        });
-
-        // Initialize listing
         loadAllEmployee();
+        initListener();
     }
 
     private void loadAllEmployee(){
@@ -98,6 +96,41 @@ public class ViewMain extends VerticalLayout implements View, IComponentInitaliz
 
     @Override
     public void enter(ViewChangeListener.ViewChangeEvent viewChangeEvent) {
+
+    }
+
+    @Override
+    public void initListener() throws Exception {
+        grid.addSelectionListener(e -> {
+            if (e.getSelected().isEmpty()) {
+                employeeEditor.setVisible(false);
+            }
+            else {
+                int size = selectionModel.getSelectedRows().size();
+                if (size == 0){
+                    employeeEditor.setVisible(false);
+                }
+                if (size == 1){
+                    employeeEditor.editEmployee((EntityEmployee) grid.getSelectedRows().iterator().next());
+                }else{
+                    employeeEditor.setVisible(false);
+                    for (Object entityEmployee : selectionModel.getSelectedRows()){
+                        EntityEmployee data = (EntityEmployee) entityEmployee;
+                        logger.info(data.toString());
+                    }
+                }
+
+            }
+        });
+
+        // Instantiate and edit new Customer the new button is clicked
+        addNewButton.addClickListener(e -> employeeEditor.editEmployee(new EntityEmployee("", "")));
+
+        // Listen changes made by the editor, refresh data from backend
+        employeeEditor.setChangeHandler(() -> {
+            employeeEditor.setVisible(false);
+            loadAllEmployee();
+        });
 
     }
 }

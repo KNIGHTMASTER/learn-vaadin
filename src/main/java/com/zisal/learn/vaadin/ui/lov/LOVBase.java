@@ -17,7 +17,7 @@ public abstract class LOVBase extends ComboBox implements IComponent<LOVParam, C
 
     private static final long serialVersionUID = -224953578935535606L;
 
-    private LOVParam LOVParam;
+    protected LOVParam LOVParam;
 
     protected Logger logger = LoggerFactory.getLogger(LOVBase.class);
 
@@ -25,7 +25,7 @@ public abstract class LOVBase extends ComboBox implements IComponent<LOVParam, C
     protected MessageSource messageSource;
 
     @Override
-    public void init() throws Exception{
+    public void initComponents() throws Exception{
         if(LOVParam == null){
             logger.error(messageSource.getMessage("ui.lov.param.error.null", null, getLocale()));
         }else{
